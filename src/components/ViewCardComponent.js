@@ -24,8 +24,12 @@ export default function ViewCardComponent({ movieId, data }) {
   const renderStars = (rating) => {
     const filledStars = Math.round(rating); // Round the rating to the nearest integer
     const stars = [];
-    for (let i = 0; i < filledStars; i++) {
-      stars.push(<StarComponent key={i} />);
+    for (let i = 1; i <= 5; i++) {
+      if (i <= filledStars) {
+        stars.push(<StarComponent key={i} color="yellow" />);
+      } else {
+        stars.push(<StarComponent key={i} color="grey" />);
+      }
     }
     return stars;
   };
@@ -37,37 +41,38 @@ export default function ViewCardComponent({ movieId, data }) {
     const year = date.getFullYear();
     let hours = date.getHours();
     const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12;
-    return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
+    return `${month} ${day}, ${year} ${hours}:${minutes}:${seconds} ${ampm}`;
   };
+
+  const imageUrl = data.image ? data.image : "../images/static-image.png";
 
   return (
     <main className="bg-red-950 h-screen">
       <div className="flex pt-[5rem] px-[3rem]">
         <div className="mt-10">
           <img
-            className="h-[28rem] w-[97rem]"
-            src={data.image}
+            className="rounded-md h-[28rem] w-[120rem]"
+            src={imageUrl}
             alt={data.movie_title}
           ></img>
         </div>
         <div className="ml-8 text-white mt-9 w-[87rem]">
           <p className="text-xl font-semibold capitalize">{data.director}</p>
-          <p className="mt-1 text-xs">{data.runtime} minutes</p>
-          <p className="mt-1 text-xs italic capitalize">{data.genre}</p>
+          <p className="text-xs">{data.runtime} minutes</p>
+          <p className="text-xs italic capitalize">{data.genre}</p>
 
           {/* rating */}
-          <div className="mt-1 flex items-center">
-            {renderStars(data.rating)}
-          </div>
+          <div className="flex items-center">{renderStars(data.rating)}</div>
 
           <div className="mt-8">
             <p className="text-xl font-semibold capitalize">
               {data.movie_title}
               <span className="ml-2 text-xl font-semibold capitalize">{`( ${data.released_year} )`}</span>
             </p>
-            <p className="text-sm">{data.description}</p>
+            <p className="text-sm text-justify">{data.description}</p>
           </div>
 
           <div className="mt-8">

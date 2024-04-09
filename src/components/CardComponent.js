@@ -34,15 +34,17 @@ const CardComponent = ({ movie }) => {
     image = "",
   } = movie || {};
 
+  const imageUrl = image ? image : "../images/static-image.png";
+
   return (
     <main>
       <Link href={`/detail/${movie_id}`}>
         <div className="bg-white w-[17rem] px-3 py-3 mt-1 rounded-md">
-          <img className="rounded-sm" src={image} alt={movie_title} />
+          <img className="rounded-sm" src={imageUrl} alt={movie_title} />
           <TruncatedMovieTitle className="mt-3 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
             {movie_title}
           </TruncatedMovieTitle>
-          <TruncatedParagraph className="text-sm mt-2" id="cardText">
+          <TruncatedParagraph className="text-justify text-sm mt-2" id="cardText">
             {description}
           </TruncatedParagraph>
         </div>

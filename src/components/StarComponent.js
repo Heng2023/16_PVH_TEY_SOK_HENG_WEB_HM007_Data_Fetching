@@ -1,7 +1,8 @@
-export default function StarComponent() {
+export default function StarComponent({ color }) {
+  const starColor = color === "yellow" ? "text-yellow-300" : "text-gray-300";
   return (
     <svg
-      className="w-4 h-4 text-yellow-300"
+      className={`w-3 h-4 ${starColor}`}
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
