@@ -40,7 +40,7 @@ const CardComponent = ({ movie }) => {
     <main>
       <Link href={`/detail/${movie_id}`}>
         <div className="bg-white w-[17rem] px-3 py-3 mt-1 rounded-md">
-          <img className="rounded-sm" src={imageUrl} alt={movie_title} />
+          <img className="rounded-sm w-[17rem] h-[8.7rem]" src={imageUrl} alt={movie_title} />
           <TruncatedMovieTitle className="mt-3 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
             {movie_title}
           </TruncatedMovieTitle>
