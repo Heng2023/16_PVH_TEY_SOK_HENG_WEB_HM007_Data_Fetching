@@ -44,13 +44,13 @@ export default function ViewCardComponent({ movieId, data }) {
     const seconds = String(date.getSeconds()).padStart(2, "0");
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12;
-    return `${month} ${day}, ${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+    return `${month} ${day}, ${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
   };
 
   const imageUrl = data.image ? data.image : "../images/static-image.png";
 
   return (
-    <main className="bg-red-950 h-screen">
+    <main className="bg-red-950">
       <div className="flex pt-[5rem] px-[3rem]">
         <div className="mt-10">
           <img
@@ -80,6 +80,7 @@ export default function ViewCardComponent({ movieId, data }) {
           </div>
         </div>
       </div>
+      <div className="pb-8"></div>
     </main>
   );
 }

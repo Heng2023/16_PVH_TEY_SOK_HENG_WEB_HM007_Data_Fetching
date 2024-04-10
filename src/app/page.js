@@ -1,35 +1,34 @@
 import CardComponent from "@/components/CardComponent";
 import "./globals.css";
-import {
-  getAllMoviesService,
-  getMoviesByGenreService,
-} from "@/services/movie.service";
+import { getAllMoviesService } from "@/services/movie.service";
 
 export default async function Home() {
+  // Fetch all movies
   const allMoviesData = await getAllMoviesService();
-  console.log("Message: " + allMoviesData);
-  const actionMoviesData = await getMoviesByGenreService("Action");
-  console.log("Message: " + actionMoviesData);
-  const dramaMoviesData = await getMoviesByGenreService("Drama");
-  console.log("Message: " + dramaMoviesData);
-  const scienceFictionMoviesData = await getMoviesByGenreService(
-    "Science Fiction"
+  console.log("All movies: ", allMoviesData);
+
+  // Extract unique genres
+  const allGenres = allMoviesData?.payload?.map((item) => item.genre);
+  const uniqueGenres = allGenres?.filter(
+    (value, index, array) => array.indexOf(value) === index
   );
-  console.log("Message: " + scienceFictionMoviesData);
-  const hollywoodMoviesData = await getMoviesByGenreService("Hollywood");
-  console.log("Message: " + hollywoodMoviesData);
-  const animeMoviesData = await getMoviesByGenreService("Anime");
-  console.log("Message: " + animeMoviesData);
+  console.log(uniqueGenres);
+
+  // Fetch movies for each unique genre
+  const genreMoviesData = {};
+  for (const genre of uniqueGenres) {
+    genreMoviesData[genre] = await getAllMoviesService(genre);
+    console.log(`${genre} movies: `, genreMoviesData[genre]);
+  }
 
   return (
     <main>
-      <div className="homepage-background h-screen"></div>
-      <div className="bg-red-950 h-[116rem]">
-        <div className="h-[10rem] mr-10 ml-10">
+      <div className="homepage-background h-screen "></div>
+      <div className="bg-red-950 h-auto">
+        <div className="mr-10 ml-10">
           <p className="capitalize py-3 text-md font-semibold text-white">
-            all movies &gt;
+            all movie &gt;
           </p>
-
           <div className="flex gap-3 overflow-y-hidden whitespace-no-wrap scrolling-touch overflow-x-auto scroll-none container">
             {allMoviesData.payload.map((movie) => (
               <CardComponent key={movie.movie_id} movie={movie} />
@@ -37,65 +36,21 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="h-[10rem] mr-10 ml-10 mt-[9.1rem]">
-          <p className="capitalize py-3 text-md font-semibold text-white">
-            Action movie &gt;
-          </p>
-
-          <div className="flex gap-3 overflow-y-hidden whitespace-no-wrap scrolling-touch overflow-x-auto scroll-none container">
-            {actionMoviesData.payload.map((movie) => (
-              <CardComponent key={movie.movie_id} movie={movie} />
-            ))}
+        {uniqueGenres.map((genre) => (
+          <div key={genre} className="mr-10 ml-10">
+            {genre && (
+              <p className="capitalize py-3 text-md font-semibold text-white">
+                {genre} movie &gt;
+              </p>
+            )}
+            <div className="flex gap-3 overflow-y-hidden whitespace-no-wrap scrolling-touch overflow-x-auto scroll-none container">
+              {genreMoviesData[genre].payload.map((movie) => (
+                <CardComponent key={movie.movie_id} movie={movie} />
+              ))}
+            </div>
           </div>
-        </div>
-
-        <div className="h-[10rem] mr-10 ml-10 mt-[9.1rem]">
-          <p className="capitalize py-3 text-md font-semibold text-white">
-            drama movie &gt;
-          </p>
-
-          <div className="flex gap-3 overflow-y-hidden whitespace-no-wrap scrolling-touch overflow-x-auto scroll-none container">
-            {dramaMoviesData.payload.map((movie) => (
-              <CardComponent key={movie.movie_id} movie={movie} />
-            ))}
-          </div>
-        </div>
-
-        <div className="h-[10rem] mr-10 ml-10 mt-[9.1rem]">
-          <p className="capitalize py-3 text-md font-semibold text-white">
-            science fiction movie &gt;
-          </p>
-
-          <div className="flex gap-3 overflow-y-hidden whitespace-no-wrap scrolling-touch overflow-x-auto scroll-none container">
-            {scienceFictionMoviesData.payload.map((movie) => (
-              <CardComponent key={movie.movie_id} movie={movie} />
-            ))}
-          </div>
-        </div>
-
-        <div className="h-[10rem] mr-10 ml-10 mt-[9.1rem]">
-          <p className="capitalize py-3 text-md font-semibold text-white">
-            Hollywood movie &gt;
-          </p>
-
-          <div className="flex gap-3 overflow-y-hidden whitespace-no-wrap scrolling-touch overflow-x-auto scroll-none container">
-            {hollywoodMoviesData.payload.map((movie) => (
-              <CardComponent key={movie.movie_id} movie={movie} />
-            ))}
-          </div>
-        </div>
-
-        <div className="h-[10rem] mr-10 ml-10 mt-[9.1rem]">
-          <p className="capitalize py-3 text-md font-semibold text-white">
-            anima movie &gt;
-          </p>
-
-          <div className="flex gap-3 overflow-y-hidden whitespace-no-wrap scrolling-touch overflow-x-auto scroll-none container">
-            {animeMoviesData.payload.map((movie) => (
-              <CardComponent key={movie.movie_id} movie={movie} />
-            ))}
-          </div>
-        </div>
+        ))}
+        <div className="pb-4"></div>
       </div>
     </main>
   );
