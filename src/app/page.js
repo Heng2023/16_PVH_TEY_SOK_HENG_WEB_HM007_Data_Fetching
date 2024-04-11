@@ -6,12 +6,15 @@ export default async function Home() {
   // Fetch all movies
   const allMoviesData = await getAllMoviesService();
   console.log("All movies: ", allMoviesData);
-
+  
   // Extract unique genres
-  const allGenres = allMoviesData?.payload?.map((item) => item.genre);
-  const uniqueGenres = allGenres?.filter(
-    (value, index, array) => array.indexOf(value) === index
-  );
+  const genresSet = new Set();
+  allMoviesData.payload.forEach((movie) => {
+    if (movie.genre) {
+      genresSet.add(movie.genre);
+    }
+  });
+  const uniqueGenres = [...genresSet];
   console.log(uniqueGenres);
 
   // Fetch movies for each unique genre

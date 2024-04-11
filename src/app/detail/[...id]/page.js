@@ -1,5 +1,5 @@
 import ViewCardComponent from "@/components/ViewCardComponent";
-import { getAllMoviesService } from "@/services/movie.service";
+import { getAllMoviesService, getMovieByIdService } from "@/services/movie.service";
 
 export async function generateStaticParams() {
   const movieItem = await getAllMoviesService();
@@ -18,12 +18,7 @@ async function getMovies(ids) {
   // loop over the dynamic route id
   for (const id of ids) {
     // Calling the API endpoint and passing the ID after the loop
-    const res = await fetch(
-      `https://movie-api-get-only-bmc3.vercel.app/api/${id}`
-    );
-
-    //convert json data into javascript object
-    const cardDetails = await res.json();
+    const cardDetails = await getMovieByIdService(id);
 
     // add the JavaScript object that fetched from the API into a local array
     catchData.push(cardDetails);
